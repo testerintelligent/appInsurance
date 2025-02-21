@@ -1,156 +1,69 @@
-/* Dashboard Container */
+@keyframes fadeIn {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+ 
 .dashboard-container {
-  background-color: #6946C6;
-  padding: 20px;
-}
 
+  min-height: 100vh;
+
+  padding: 2rem;
+
+  background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+
+}
+ 
 .dashboard-content {
-  width: 100%;
-  overflow-x: auto;
-}
 
-/* Table Styling */
-.insuranceTable {
-  max-width: 100%;
-}
+  animation: fadeIn 0.5s ease-out;
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  border: 2px solid white;
 }
+ 
+/* Custom scrollbar */
 
-th, td {
-  border: 2px solid white;
-  padding: 12px 16px;
-  text-align: center;
-  font-size: 14px;
-  white-space: nowrap; /* Prevents text wrapping */
+::-webkit-scrollbar {
+
+  width: 8px;
+
+  height: 8px;
+
 }
+ 
+::-webkit-scrollbar-track {
 
-/* Table Header */
-th {
-  background-color: black;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
+  background: #f1f1f1;
 
-/* Table Rows */
-td {
-  color: white;
-  font-weight: 500;
-}
-
-/* Hover effect on rows */
-table tr:hover td {
-  background-color: #d0a7f1;
-  color: black;
-  transition: 0.2s ease-in-out;
-}
-
-/* Delete Button */
-.deleteButton button {
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: bold;
-  border: 2px solid black;
-  background-color: white;
-  color: black;
-  border-radius: 5px;
-  transition: 0.3s ease-in-out;
-}
-
-.deleteButton button:hover {
-  background-color: red;
-  color: white;
-  border-color: red;
-}
-
-/* Modal Styling */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modalContent {
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  width: 350px;
-  border: 2px solid black;
-}
-
-.modalContent p {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.modalContent button {
-  margin: 10px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 2px solid black;
-  cursor: pointer;
   border-radius: 4px;
-  transition: 0.2s ease-in-out;
+
 }
+ 
+::-webkit-scrollbar-thumb {
 
-.PopupAccept {
-  background-color: white;
-  color: black;
-  border: 2px solid black;
+  background: #6366f1;
+
+  border-radius: 4px;
+
 }
+ 
+::-webkit-scrollbar-thumb:hover {
 
-.PopupAccept:hover {
-  background-color: #4CAF50;
-  color: white;
+  background: #4f46e5;
+
 }
-
-.PopupCancel {
-  background-color: white;
-  color: black;
-  border: 2px solid black;
-}
-
-.PopupCancel:hover {
-  background-color: #D32F2F;
-  color: white;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  table {
-    font-size: 12px;
-  }
-
-  th, td {
-    padding: 8px;
-  }
-
-  .modalContent {
-    width: 280px;
-    padding: 15px;
-  }
-
-  .PopupAccept, .PopupCancel {
-    width: 100px;
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-}
+ 
+ 
