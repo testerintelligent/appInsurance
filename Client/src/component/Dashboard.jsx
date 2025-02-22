@@ -1,5 +1,3 @@
-"use client"
- 
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -20,11 +18,12 @@ import {
   IconButton,
   Tooltip,
   Menu,
+  TablePagination,
 } from "@mui/material"
 import { motion, AnimatePresence } from "framer-motion"
 import { FilterList, Delete, Sort, Warning } from "@mui/icons-material"
 import { styled, alpha } from "@mui/material/styles"
- 
+
 // Styled components
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   background: "rgba(255, 255, 255, 0.95)",
@@ -35,7 +34,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   margin: "20px",
   overflow: "hidden",
 }))
- 
+
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
   background: "linear-gradient(145deg, #6366f1 0%, #4f46e5 100%)",
   "& th": {
@@ -49,7 +48,7 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
     },
   },
 }))
- 
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   transition: "all 0.3s ease",
   "&:hover": {
@@ -57,7 +56,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     transform: "scale(1.002)",
   },
 }))
- 
+
 const DeleteButton = styled(Button)(({ theme }) => ({
   background: "linear-gradient(145deg, #ef4444 0%, #dc2626 100%)",
   color: "white",
@@ -65,7 +64,7 @@ const DeleteButton = styled(Button)(({ theme }) => ({
     background: "linear-gradient(145deg, #dc2626 0%, #b91c1c 100%)",
   },
 }))
- 
+
 const Dashboard = () => {
   const [insuranceData, setInsuranceData] = useState([])
   const [showModal, setShowModal] = useState(false)
@@ -74,19 +73,21 @@ const Dashboard = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" })
   const [filterAnchorEl, setFilterAnchorEl] = useState(null)
   const [activeColumn, setActiveColumn] = useState(null)
+  const [page, setPage] = useState(0) // For pagination: current page
+  const [rowsPerPage, setRowsPerPage] = useState(5) // Number of rows per page
   const navigate = useNavigate()
- 
+
   useEffect(() => {
     const sessionKey = sessionStorage.getItem("sessionKey")
     if (!sessionKey) {
       navigate("/insurance")
     }
   }, [navigate])
- 
+
   useEffect(() => {
     fetchData()
   }, [])
- 
+
   const fetchData = async () => {
     try {
       const response = await axios.get("http://10.192.190.148:5000/Dashboard")
@@ -95,54 +96,57 @@ const Dashboard = () => {
       console.error("Error fetching data:", error)
     }
   }
- 
+
   const handleSort = (key) => {
     let direction = "asc"
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc"
     }
     setSortConfig({ key, direction })
- 
+
     const sortedData = [...insuranceData].sort((a, b) => {
       if (a[key] < b[key]) return direction === "asc" ? -1 : 1
       if (a[key] > b[key]) return direction === "asc" ? 1 : -1
       return 0
     })
- 
+
     setInsuranceData(sortedData)
   }
- 
+
   const handleFilter = (column, value) => {
     const newFilters = { ...filters, [column]: value }
     if (!value) delete newFilters[column]
     setFilters(newFilters)
   }
- 
+
   const filteredData = insuranceData.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
       return String(item[key]).toLowerCase().includes(value.toLowerCase())
     })
   })
- 
+
+  // Pagination handling: slice data to fit current page
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
   const openFilterMenu = (event, column) => {
     setFilterAnchorEl(event.currentTarget)
     setActiveColumn(column)
   }
- 
+
   const closeFilterMenu = () => {
     setFilterAnchorEl(null)
     setActiveColumn(null)
   }
- 
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A"
     const date = new Date(dateString)
     if (isNaN(date.getTime())) return "Invalid Date"
     return new Intl.DateTimeFormat("en-GB").format(date)
   }
- 
+
   const generateRandomNumber = () => Math.floor(100000 + Math.random() * 900000)
- 
+
   const handleDelete = async () => {
     try {
       await axios.delete(`http://10.192.190.148:5000/Dashboard/${policyToDelete}`)
@@ -152,7 +156,7 @@ const Dashboard = () => {
       console.error("Error deleting policy:", error)
     }
   }
- 
+
   const tableHeaders = [
     { id: "CurrentDate", label: "Policy Create Date" },
     { id: "policyNumber", label: "Policy Number" },
@@ -165,8 +169,16 @@ const Dashboard = () => {
     { id: "SumInsured", label: "Sum Insured" },
     { id: "Premium", label: "Premium" },
   ]
- 
-   
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0) // Reset to first page
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -201,7 +213,7 @@ const Dashboard = () => {
           </StyledTableHead>
           <TableBody>
             <AnimatePresence>
-              {filteredData.map((insurance, index) => (
+              {paginatedData.map((insurance, index) => (
                 <motion.tr
                   key={insurance._id}
                   initial={{ opacity: 0, y: 20 }}
@@ -242,7 +254,18 @@ const Dashboard = () => {
           </TableBody>
         </Table>
       </StyledTableContainer>
- 
+
+      {/* Pagination Component */}
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
@@ -266,7 +289,7 @@ const Dashboard = () => {
           fullWidth
         />
       </Menu>
- 
+
       <Dialog
         open={showModal}
         onClose={() => setShowModal(false)}
@@ -304,8 +327,5 @@ const Dashboard = () => {
     </motion.div>
   )
 }
- 
+
 export default Dashboard
- 
- 
- 
