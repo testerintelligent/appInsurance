@@ -1,8 +1,6 @@
 # Use a Node.js image
 FROM node:18
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
 # Set working directory
 WORKDIR /app
 
@@ -18,5 +16,5 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Run the React app
-CMD ["npm", "start"]
+# Run the React app with increased memory limit explicitly in CMD
+CMD ["node", "--max-old-space-size=4096", "node_modules/.bin/react-scripts", "start"]
