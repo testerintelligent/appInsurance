@@ -10,9 +10,6 @@ services:
       - "3000:3000"
     depends_on:
       - server
-    environment:
-      - NODE_OPTIONS=--max-old-space-size=4096  # Increasing Node.js memory limit
-    mem_limit: 4g  # Limit memory usage for the client service (4GB)
 
   server:
     build:
@@ -25,7 +22,6 @@ services:
       MONGO_URI: mongodb://10.192.190.148:27017/registeredUser
     depends_on:
       - mongo
-    mem_limit: 2g  # Set server memory limit (2GB)
 
   mongo:
     image: mongo:latest
@@ -34,7 +30,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    mem_limit: 2g  # Set memory limit for the MongoDB container (2GB)
 
 volumes:
   mongo_data:
