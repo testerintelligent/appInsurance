@@ -1,5 +1,5 @@
 # Use a Node.js image
-FROM node:20
+FROM node:lts
 
 # Set working directory
 WORKDIR /app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the React app with increased memory limit explicitly in CMD
-CMD ["node", "--max-old-space-size=4096", "node_modules/.bin/react-scripts", "start"]
+CMD ["npm", "start"]
