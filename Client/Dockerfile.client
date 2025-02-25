@@ -1,20 +1,19 @@
-# Use a Node.js image
-FROM node:22.14.0-alpine
-
-# Set working directory
+FROM node:18.16.0-alpine
+ 
+# set working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json first
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install --force
-
-# Copy the rest of the application files
-COPY . .
-
-# Expose the port the app runs on
+ 
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+ 
+# install app dependencies
+COPY package.json ./
+RUN npm install --silent
+ 
+# add app
+COPY . ./
+ 
 EXPOSE 3000
-
-# Run the React app with increased memory limit explicitly in CMD
+ 
+# start app
 CMD ["npm", "start"]
