@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 
 import { HiMenuAlt3, HiX } from "react-icons/hi"
 
-import { RiDashboardLine, RiFileListLine, RiCustomerService2Line, RiAdminLine, RiLogoutBoxLine } from "react-icons/ri"
+import { RiDashboardLine, RiFileListLine, RiCustomerService2Line, RiAdminLine, RiLogoutBoxLine,  RiBillLine } from "react-icons/ri"
  
 const menuItems = [
 
@@ -19,6 +19,8 @@ const menuItems = [
   { path: "/contact", name: "Contact", icon: RiCustomerService2Line },
 
   { path: "/adminPanel", name: "Admin Panel", icon: RiAdminLine },
+
+  { path: "/billing", name: "Billing Information", icon: RiBillLine }
 
 ]
  

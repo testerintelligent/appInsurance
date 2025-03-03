@@ -48,9 +48,7 @@ function App() {
               <Route path="/insurance" element={<InsurancePage />} />
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/LifeInsurance" element={<LifeInsurance />} />
-              <Route path="/contact" element={<Contact />} />
-              
-              {/* ✅ Added Billing Page Route */}
+              <Route path="/contact" element={<Contact />} />              
               <Route path="/billing" element={<BillingPage />} />
               
             </Route>
